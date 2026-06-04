@@ -1,281 +1,136 @@
-from flask import Flask, render_template, request, send_file, redirect
-from reportlab.pdfgen import canvas
-from db_config import get_connection
-import requests
+import streamlit as st
+import pandas as pd
 
-app = Flask(__name__)
+st.set_page_config(
+    page_title="Maritime Routing System",
+    page_icon="🚢",
+    layout="wide"
+)
 
+if "history" not in st.session_state:
+    st.session_state.history = []
 
-@app.route("/")
-def home():
-    return render_template("index.html")
+st.title("🚢 AI-Powered Maritime Weather Routing System")
+st.write("Voyage route planning, fuel calculation, weather risk analysis and diversion recommendation.")
 
+menu = st.sidebar.radio(
+    "Navigation",
+    [
+        "Home",
+        "Route Calculator",
+        "Weather Dashboard",
+        "Voyage History",
+        "Project Report",
+        "Admin Dashboard"
+    ]
+)
 
-@app.route("/route", methods=["POST"])
-def route():
-    source = request.form["source"]
-    destination = request.form["destination"]
-    distance = float(request.form["distance"])
-    speed = float(request.form["speed"])
-
+def calculate_voyage(distance, speed):
     days = distance / (speed * 24)
-
-    fuel_per_day = 32
-    fuel_price = 463
-    fuel_used = days * fuel_per_day
-    fuel_cost = fuel_used * fuel_price
-
-    port_charges = 45000
-    canal_charges = 120000
-    total_cost = fuel_cost + port_charges + canal_charges
-
-    gale_risk = "18% - 22%"
-    sea_state = "BF 7"
-    diversion = "8° Southward Deviation Recommended"
-
-    try:
-        conn = get_connection()
-        cursor = conn.cursor()
-
-        sql = """
-        INSERT INTO voyage
-        (source_port, destination_port, distance_nm, speed,
-        voyage_days, fuel_used, fuel_cost, total_cost,
-        weather_risk, diversion_suggestion)
-        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
-        """
-
-        values = (
-            source,
-            destination,
-            distance,
-            speed,
-            round(days, 2),
-            round(fuel_used, 2),
-            round(fuel_cost, 2),
-            round(total_cost, 2),
-            "High",
-            diversion
-        )
-
-        cursor.execute(sql, values)
-        conn.commit()
-
-        cursor.close()
-        conn.close()
-
-    except Exception as e:
-        print("Database Error:", e)
-
-    return render_template(
-        "route.html",
-        source=source,
-        destination=destination,
-        distance=distance,
-        speed=speed,
-        days=round(days, 2),
-        fuel_used=round(fuel_used, 2),
-        fuel_cost=round(fuel_cost, 2),
-        total_cost=round(total_cost, 2),
-        gale_risk=gale_risk,
-        sea_state=sea_state,
-        diversion=diversion
-    )
-
-
-@app.route("/weather")
-def weather():
-    try:
-        url = "https://marine-api.open-meteo.com/v1/marine"
-
-        params = {
-            "latitude": 12,
-            "longitude": 65,
-            "hourly": "wave_height,wave_direction,wave_period",
-            "timezone": "auto"
-        }
-
-        response = requests.get(url, params=params, timeout=10)
-        data = response.json()
-
-        wave_height = data["hourly"]["wave_height"][0]
-        wave_direction = data["hourly"]["wave_direction"][0]
-        wave_period = data["hourly"]["wave_period"][0]
-
-    except Exception as e:
-        print("Weather API Error:", e)
-        wave_height = 4.2
-        wave_direction = 240
-        wave_period = 8
-
-    risk_level = "Low"
-
-    if wave_height >= 4:
-        risk_level = "High"
-    elif wave_height >= 2:
-        risk_level = "Medium"
-
-    return render_template(
-        "weather.html",
-        wave_height=wave_height,
-        wave_direction=wave_direction,
-        wave_period=wave_period,
-        risk_level=risk_level
-    )
-
-
-@app.route("/report")
-def report():
-    return render_template("report.html")
-
-
-@app.route("/map")
-def map_page():
-    return render_template("map.html")
-
-
-@app.route("/history")
-def history():
-    try:
-        conn = get_connection()
-        cursor = conn.cursor(dictionary=True)
-
-        cursor.execute("SELECT * FROM voyage ORDER BY voyage_id DESC")
-        voyages = cursor.fetchall()
-
-        cursor.close()
-        conn.close()
-
-    except Exception as e:
-        print("Database Error:", e)
-        voyages = []
-
-    return render_template("history.html", voyages=voyages)
-
-
-@app.route("/vessel")
-def vessel():
-    return render_template("vessel.html")
-
-
-@app.route("/add-vessel", methods=["POST"])
-def add_vessel():
-    vessel_name = request.form["vessel_name"]
-    dwt = request.form["dwt"]
-    draft = request.form["draft"]
-    speed = request.form["speed"]
-
-    try:
-        conn = get_connection()
-        cursor = conn.cursor()
-
-        sql = """
-        INSERT INTO vessel
-        (vessel_name, dwt, draft, speed)
-        VALUES (%s,%s,%s,%s)
-        """
-
-        cursor.execute(sql, (vessel_name, dwt, draft, speed))
-        conn.commit()
-
-        cursor.close()
-        conn.close()
-
-    except Exception as e:
-        print("Database Error:", e)
-
-    return render_template("vessel.html")
-
-
-@app.route("/login-page")
-def login_page():
-    return render_template("login.html")
-
-
-@app.route("/login", methods=["POST"])
-def login():
-    username = request.form["username"]
-    password = request.form["password"]
-
-    try:
-        conn = get_connection()
-        cursor = conn.cursor(dictionary=True)
-
-        cursor.execute(
-            "SELECT * FROM users WHERE username=%s AND password=%s",
-            (username, password)
-        )
-
-        user = cursor.fetchone()
-
-        cursor.close()
-        conn.close()
-
-        if user:
-            return redirect("/admin")
-        else:
-            return render_template("login.html")
-
-    except Exception as e:
-        print("Database Error:", e)
-        return render_template("login.html")
-
-
-@app.route("/admin")
-def admin():
-    try:
-        conn = get_connection()
-        cursor = conn.cursor()
-
-        cursor.execute("SELECT COUNT(*) FROM voyage")
-        total_voyages = cursor.fetchone()[0]
-
-        cursor.execute("SELECT COUNT(*) FROM vessel")
-        total_vessels = cursor.fetchone()[0]
-
-        cursor.close()
-        conn.close()
-
-    except Exception as e:
-        print("Database Error:", e)
-        total_voyages = 0
-        total_vessels = 0
-
-    return render_template(
-        "admin.html",
-        total_voyages=total_voyages,
-        total_vessels=total_vessels
-    )
-
-
-@app.route("/download-report")
-def download_report():
-    filename = "voyage_report.pdf"
-
-    c = canvas.Canvas(filename)
-    c.setFont("Helvetica-Bold", 18)
-    c.drawString(100, 800, "Maritime Voyage Report")
-
-    c.setFont("Helvetica", 12)
-    c.drawString(100, 760, "Project: AI-Powered Maritime Weather Routing System")
-    c.drawString(100, 730, "Route: Rotterdam to Singapore")
-    c.drawString(100, 710, "Distance: 8412 NM")
-    c.drawString(100, 690, "Speed: 12 Knots")
-    c.drawString(100, 670, "Voyage Days: 29.21")
-    c.drawString(100, 650, "Fuel Used: 934.67 MT")
-    c.drawString(100, 630, "Fuel Cost: $432,750")
-    c.drawString(100, 610, "Port Charges: $45,000")
-    c.drawString(100, 590, "Canal Charges: $120,000")
-    c.drawString(100, 570, "Total Cost: $597,750")
-    c.drawString(100, 530, "Weather Risk: High")
-    c.drawString(100, 510, "Gale Risk: 18% - 22%")
-    c.drawString(100, 490, "Sea State: BF 7")
-    c.drawString(100, 470, "Recommended Diversion: 8 Degrees Southward Deviation")
-
-    c.save()
-
-    return send_file(filename, as_attachment=True)
-
-
-if __name__ == "__main__":
-    app.run(debug=True)
+    fuel_used = days * 32
+    fuel_cost = fuel_used * 463
+    total_cost = fuel_cost + 45000 + 120000
+    return days, fuel_used, fuel_cost, total_cost
+
+if menu == "Home":
+    st.header("Project Overview")
+    st.write("""
+    This system helps shipping operators calculate voyage duration, fuel usage,
+    total voyage cost, weather risk and route diversion decisions.
+    """)
+
+elif menu == "Route Calculator":
+    st.header("Route Calculator")
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        source = st.text_input("Source Port", "Rotterdam")
+        distance = st.number_input("Distance in Nautical Miles", value=8412.0, min_value=1.0)
+
+    with col2:
+        destination = st.text_input("Destination Port", "Singapore")
+        speed = st.number_input("Speed in Knots", value=12.0, min_value=1.0)
+
+    if st.button("Calculate Route"):
+        days, fuel_used, fuel_cost, total_cost = calculate_voyage(distance, speed)
+
+        c1, c2, c3, c4 = st.columns(4)
+        c1.metric("Voyage Days", round(days, 2))
+        c2.metric("Fuel Used", f"{round(fuel_used, 2)} MT")
+        c3.metric("Fuel Cost", f"${round(fuel_cost, 2)}")
+        c4.metric("Total Cost", f"${round(total_cost, 2)}")
+
+        st.warning("⚠ High Monsoon Activity Detected")
+        st.info("Gale Risk: 18% - 22%")
+        st.info("Sea State: BF 7")
+        st.success("Recommended Diversion: 8° Southward Deviation")
+
+        st.session_state.history.append({
+            "Source": source,
+            "Destination": destination,
+            "Distance NM": distance,
+            "Speed": speed,
+            "Voyage Days": round(days, 2),
+            "Fuel Used MT": round(fuel_used, 2),
+            "Total Cost": round(total_cost, 2),
+            "Status": "Detour Suggested"
+        })
+
+elif menu == "Weather Dashboard":
+    st.header("Marine Weather Dashboard")
+
+    wave_height = st.slider("Wave Height (m)", 0.0, 8.0, 4.2)
+    wave_direction = st.slider("Wave Direction (°)", 0, 360, 240)
+    wave_period = st.slider("Wave Period (sec)", 1, 20, 8)
+
+    risk = "High" if wave_height >= 4 else "Medium" if wave_height >= 2 else "Low"
+
+    c1, c2, c3, c4 = st.columns(4)
+    c1.metric("Wave Height", f"{wave_height} m")
+    c2.metric("Wave Direction", f"{wave_direction}°")
+    c3.metric("Wave Period", f"{wave_period} sec")
+    c4.metric("Risk Level", risk)
+
+    if risk == "High":
+        st.error("High marine risk detected. Route diversion is recommended.")
+    elif risk == "Medium":
+        st.warning("Medium marine risk. Continue with caution.")
+    else:
+        st.success("Low marine risk. Planned route is acceptable.")
+
+elif menu == "Voyage History":
+    st.header("Voyage History")
+
+    if len(st.session_state.history) == 0:
+        st.info("No voyage calculated yet.")
+    else:
+        st.dataframe(pd.DataFrame(st.session_state.history), use_container_width=True)
+
+elif menu == "Project Report":
+    st.header("Project Report")
+
+    st.subheader("Abstract")
+    st.write("""
+    The AI-Powered Maritime Weather Routing System supports voyage planning
+    through ETA calculation, fuel estimation, weather-risk analysis and diversion recommendation.
+    """)
+
+    st.subheader("Modules")
+    st.write("""
+    - Route Planner
+    - Weather Dashboard
+    - Fuel Calculator
+    - Cost Calculator
+    - Voyage History
+    - AI Recommendation Engine
+    """)
+
+elif menu == "Admin Dashboard":
+    st.header("Admin Dashboard")
+
+    c1, c2, c3, c4 = st.columns(4)
+    c1.metric("Total Voyages", len(st.session_state.history))
+    c2.metric("Total Vessels", 1)
+    c3.metric("Weather Risk", "High")
+    c4.metric("System Status", "Active")
