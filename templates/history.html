@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Voyage History</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Voyage History</h1>
+
+    <div class="card">
+
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Source</th>
+                <th>Destination</th>
+                <th>Distance</th>
+                <th>Days</th>
+                <th>Fuel Used</th>
+                <th>Total Cost</th>
+            </tr>
+
+            {% for voyage in voyages %}
+            <tr>
+                <td>{{ voyage.voyage_id }}</td>
+                <td>{{ voyage.source_port }}</td>
+                <td>{{ voyage.destination_port }}</td>
+                <td>{{ voyage.distance_nm }} NM</td>
+                <td>{{ voyage.voyage_days }}</td>
+                <td>{{ voyage.fuel_used }} MT</td>
+                <td>${{ voyage.total_cost }}</td>
+            </tr>
+            {% endfor %}
+
+        </table>
+
+    </div>
+
+    <a href="/">Back to Home</a>
+    <a href="/map">Voyage Map</a>
+    <a href="/weather">Weather Dashboard</a>
+
+</div>
+
+</body>
+</html>

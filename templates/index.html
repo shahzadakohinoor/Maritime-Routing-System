@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Maritime Routing System</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <a href="/map">Voyage Map</a>
+    <a href="/history">Voyage History</a>
+    <a href="/download-report">Download PDF Report</a>
+    <a href="/vessel">Vessel Registration</a>
+    <a href="/login-page">Admin Login</a>
+</head>
+<body>
+
+<div class="container">
+    <h1>AI-Powered Maritime Weather Routing System</h1>
+    <p>Optimize voyage route, fuel cost, ETA and weather risk.</p>
+
+    <div class="card">
+        <form action="/route" method="POST">
+            <input type="text" name="source" placeholder="Source Port" required>
+            <input type="text" name="destination" placeholder="Destination Port" required>
+            <input type="number" name="distance" placeholder="Distance in Nautical Miles" required>
+            <input type="number" name="speed" placeholder="Speed in Knots" required>
+
+            <button type="submit">Calculate Route</button>
+        </form>
+    </div>
+
+    <a href="/weather">Weather Dashboard</a>
+    <a href="/report">Project Report</a>
+</div>
+
+</body>
+</html>

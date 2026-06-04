@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Weather Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Real-Time Marine Weather Dashboard</h1>
+
+    <div class="dashboard">
+
+        <div class="kpi">
+            <h3>Wave Height</h3>
+            <p>{{ wave_height }} m</p>
+        </div>
+
+        <div class="kpi">
+            <h3>Wave Direction</h3>
+            <p>{{ wave_direction }}°</p>
+        </div>
+
+        <div class="kpi">
+            <h3>Wave Period</h3>
+            <p>{{ wave_period }} sec</p>
+        </div>
+
+        <div class="kpi">
+            <h3>Risk Level</h3>
+            <p>{{ risk_level }}</p>
+        </div>
+
+    </div>
+
+    <div class="card">
+        <h2>Marine Weather Location</h2>
+        <p><strong>Region:</strong> Arabian Sea Monsoon Zone</p>
+        <p><strong>Latitude:</strong> 12° N</p>
+        <p><strong>Longitude:</strong> 65° E</p>
+        <p>
+            Data is fetched from the marine weather API. If the API is unavailable,
+            the system automatically displays fallback sample data.
+        </p>
+    </div>
+
+    <div class="card">
+        <h2>Weather Impact Analysis</h2>
+
+        {% if risk_level == "High" %}
+            <p>⚠ High marine risk detected.</p>
+            <p>Large waves may reduce vessel speed and increase fuel consumption.</p>
+            <p style="color:#00d084;">
+                Recommended Action: Follow 8° Southward Diversion Route.
+            </p>
+        {% elif risk_level == "Medium" %}
+            <p>⚠ Medium marine risk detected.</p>
+            <p>Monitor voyage speed and weather conditions continuously.</p>
+            <p style="color:#00d084;">
+                Recommended Action: Maintain route with caution.
+            </p>
+        {% else %}
+            <p>✅ Low marine risk detected.</p>
+            <p>Current sea conditions are acceptable for normal voyage operation.</p>
+            <p style="color:#00d084;">
+                Recommended Action: Continue planned route.
+            </p>
+        {% endif %}
+    </div>
+
+    <div class="card">
+        <h2>Route Weather Comparison</h2>
+
+        <table>
+            <tr>
+                <th>Parameter</th>
+                <th>Main Route</th>
+                <th>Suggested Detour</th>
+            </tr>
+
+            <tr>
+                <td>Wave Height</td>
+                <td>{{ wave_height }} m</td>
+                <td>Lower Expected</td>
+            </tr>
+
+            <tr>
+                <td>Risk Level</td>
+                <td>{{ risk_level }}</td>
+                <td>Reduced Risk</td>
+            </tr>
+
+            <tr>
+                <td>Fuel Impact</td>
+                <td>Higher Consumption</td>
+                <td>Optimized Consumption</td>
+            </tr>
+
+            <tr>
+                <td>Route Safety</td>
+                <td>Weather Dependent</td>
+                <td>Safer Alternative</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="card">
+        <h2>AI Weather Recommendation</h2>
+        <p>
+            The system analyzes wave height, wave period, direction and voyage route risk.
+            Based on the current marine conditions, the routing engine recommends the safest
+            and most economical route strategy.
+        </p>
+
+        <ul>
+            <li>Monitor sea state continuously.</li>
+            <li>Adjust speed if wave height increases.</li>
+            <li>Use detour route if risk level becomes high.</li>
+            <li>Review ETA and fuel cost after route adjustment.</li>
+        </ul>
+    </div>
+
+    <a href="/">Back to Home</a>
+    <a href="/map">Voyage Map</a>
+    <a href="/history">Voyage History</a>
+    <a href="/report">Project Report</a>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Voyage Route Map</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>Interactive Voyage Route Map</h1>
+
+    <div id="map" style="height: 550px; border-radius: 12px;"></div>
+
+    <br>
+    <a href="/">Back to Home</a>
+</div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+    var map = L.map('map').setView([18, 55], 4);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: 'OpenStreetMap'
+    }).addTo(map);
+
+    var mainRoute = [
+        [51.9244, 4.4777],
+        [36.1408, -5.3536],
+        [31.2001, 29.9187],
+        [30.0444, 31.2357],
+        [12.7855, 43.2729],
+        [10.8505, 76.2711],
+        [1.3521, 103.8198]
+    ];
+
+    var detourRoute = [
+        [51.9244, 4.4777],
+        [36.1408, -5.3536],
+        [31.2001, 29.9187],
+        [12.7855, 43.2729],
+        [5.5, 65.0],
+        [3.5, 78.0],
+        [1.3521, 103.8198]
+    ];
+
+    L.polyline(mainRoute, {
+        color: 'red',
+        weight: 4
+    }).addTo(map).bindPopup("Main Route - High Weather Risk");
+
+    L.polyline(detourRoute, {
+        color: 'green',
+        weight: 4,
+        dashArray: '10,10'
+    }).addTo(map).bindPopup("Suggested Detour Route");
+
+    L.marker([51.9244, 4.4777]).addTo(map).bindPopup("Rotterdam Port");
+    L.marker([1.3521, 103.8198]).addTo(map).bindPopup("Singapore Port");
+
+    L.circle([12, 65], {
+        color: 'orange',
+        fillColor: 'orange',
+        fillOpacity: 0.3,
+        radius: 900000
+    }).addTo(map).bindPopup("Arabian Sea Monsoon Risk Zone");
+
+</script>
+
+</body>
+</html>

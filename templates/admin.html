@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Admin Dashboard</h1>
+
+    <div class="card">
+        <h2>Total Voyages</h2>
+        <p>{{ total_voyages }}</p>
+    </div>
+
+    <div class="card">
+        <h2>Total Vessels</h2>
+        <p>{{ total_vessels }}</p>
+    </div>
+
+    <a href="/">Home</a>
+    <a href="/history">Voyage History</a>
+
+</div>
+
+</body>
+</html>
