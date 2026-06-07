@@ -256,7 +256,7 @@ GitHub: https://github.com/shahzadakohinoor
 ## License
 
 This project is developed for educational, academic, internship, and research purposes.
-© 2026 Shahzada Kohinoor. All Rights Reserved.
+* © 2026 Shahzada Kohinoor. All Rights Reserved.
 
 ---
 
