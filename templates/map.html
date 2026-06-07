@@ -3,7 +3,6 @@
 <head>
     <title>Voyage Route Map</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
 </head>
 <body>
@@ -11,9 +10,8 @@
 <div class="container">
     <h1>Interactive Voyage Route Map</h1>
 
-    <div id="map" style="height: 550px; border-radius: 12px;"></div>
+    <div id="map"></div>
 
-    <br>
     <a href="/">Back to Home</a>
 </div>
 
@@ -30,9 +28,7 @@
         [51.9244, 4.4777],
         [36.1408, -5.3536],
         [31.2001, 29.9187],
-        [30.0444, 31.2357],
         [12.7855, 43.2729],
-        [10.8505, 76.2711],
         [1.3521, 103.8198]
     ];
 
@@ -46,16 +42,8 @@
         [1.3521, 103.8198]
     ];
 
-    L.polyline(mainRoute, {
-        color: 'red',
-        weight: 4
-    }).addTo(map).bindPopup("Main Route - High Weather Risk");
-
-    L.polyline(detourRoute, {
-        color: 'green',
-        weight: 4,
-        dashArray: '10,10'
-    }).addTo(map).bindPopup("Suggested Detour Route");
+    L.polyline(mainRoute, { color: 'red', weight: 4 }).addTo(map).bindPopup("Main Route");
+    L.polyline(detourRoute, { color: 'green', weight: 4, dashArray: '10,10' }).addTo(map).bindPopup("Suggested Detour");
 
     L.marker([51.9244, 4.4777]).addTo(map).bindPopup("Rotterdam Port");
     L.marker([1.3521, 103.8198]).addTo(map).bindPopup("Singapore Port");
@@ -66,8 +54,8 @@
         fillOpacity: 0.3,
         radius: 900000
     }).addTo(map).bindPopup("Arabian Sea Monsoon Risk Zone");
-
 </script>
 
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>

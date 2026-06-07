@@ -127,6 +127,11 @@ tr:nth-child(even) {
     margin-top: 20px;
 }
 
+.error {
+    color: #ff5c5c;
+    font-weight: bold;
+}
+
 @media(max-width: 768px) {
     .container {
         width: 95%;
