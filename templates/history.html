@@ -11,7 +11,6 @@
     <h1>Voyage History</h1>
 
     <div class="card">
-
         <table>
             <tr>
                 <th>ID</th>
@@ -34,16 +33,13 @@
                 <td>${{ voyage.total_cost }}</td>
             </tr>
             {% endfor %}
-
         </table>
-
     </div>
 
     <a href="/">Back to Home</a>
-    <a href="/map">Voyage Map</a>
-    <a href="/weather">Weather Dashboard</a>
 
 </div>
 
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>

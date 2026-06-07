@@ -2,12 +2,7 @@
 <html>
 <head>
     <title>Maritime Routing System</title>
-    <link rel="stylesheet" href="/static/css/style.css">
-    <a href="/map">Voyage Map</a>
-    <a href="/history">Voyage History</a>
-    <a href="/download-report">Download PDF Report</a>
-    <a href="/vessel">Vessel Registration</a>
-    <a href="/login-page">Admin Login</a>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
 
@@ -16,19 +11,24 @@
     <p>Optimize voyage route, fuel cost, ETA and weather risk.</p>
 
     <div class="card">
-        <form action="/route" method="POST">
-            <input type="text" name="source" placeholder="Source Port" required>
-            <input type="text" name="destination" placeholder="Destination Port" required>
-            <input type="number" name="distance" placeholder="Distance in Nautical Miles" required>
-            <input type="number" name="speed" placeholder="Speed in Knots" required>
-
+        <form action="/route" method="POST" onsubmit="return validateRouteForm()">
+            <input type="text" id="source" name="source" placeholder="Source Port" required>
+            <input type="text" id="destination" name="destination" placeholder="Destination Port" required>
+            <input type="number" id="distance" name="distance" placeholder="Distance in Nautical Miles" required>
+            <input type="number" id="speed" name="speed" placeholder="Speed in Knots" required>
             <button type="submit">Calculate Route</button>
         </form>
     </div>
 
     <a href="/weather">Weather Dashboard</a>
+    <a href="/map">Voyage Map</a>
+    <a href="/history">Voyage History</a>
+    <a href="/vessel">Vessel Registration</a>
     <a href="/report">Project Report</a>
+    <a href="/download-report">Download PDF Report</a>
+    <a href="/login-page">Admin Login</a>
 </div>
 
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>

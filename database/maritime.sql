@@ -9,13 +9,6 @@ CREATE TABLE vessel (
     speed FLOAT
 );
 
-CREATE TABLE route (
-    route_id INT PRIMARY KEY AUTO_INCREMENT,
-    source_port VARCHAR(100),
-    destination_port VARCHAR(100),
-    distance_nm FLOAT
-);
-
 CREATE TABLE voyage (
     voyage_id INT PRIMARY KEY AUTO_INCREMENT,
     source_port VARCHAR(100),
@@ -40,19 +33,6 @@ CREATE TABLE weather (
     risk_level VARCHAR(50)
 );
 
-INSERT INTO vessel VALUES
-(NULL, 'Sample Vessel', 50000, 12, 12);
-
-INSERT INTO route VALUES
-(NULL, 'Rotterdam', 'Singapore', 8412);
-
-INSERT INTO weather VALUES
-(NULL, 32, 4.2, '18% - 22%', 'BF 7', 'High');
-
-INSERT INTO voyage
-(source_port, destination_port, distance_nm, speed, voyage_days, fuel_used, fuel_cost, total_cost, weather_risk, diversion_suggestion)
-VALUES
-('Rotterdam', 'Singapore', 8412, 12, 29.21, 934.67, 432750.67, 597750.67, 'High', '8 Degree Southward Deviation Recommended');
 CREATE TABLE users (
     user_id INT PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(100),
@@ -61,3 +41,9 @@ CREATE TABLE users (
 
 INSERT INTO users VALUES
 (NULL, 'admin', 'admin123');
+
+INSERT INTO vessel VALUES
+(NULL, 'Sample Vessel', 50000, 12, 12);
+
+INSERT INTO weather VALUES
+(NULL, 32, 4.2, '18% - 22%', 'BF 7', 'High');

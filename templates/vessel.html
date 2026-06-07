@@ -12,33 +12,11 @@
 
     <div class="card">
         <form action="/add-vessel" method="POST">
-
-            <input type="text"
-                   name="vessel_name"
-                   placeholder="Vessel Name"
-                   required>
-
-            <input type="number"
-                   name="dwt"
-                   placeholder="Deadweight Tonnage"
-                   required>
-
-            <input type="number"
-                   step="0.1"
-                   name="draft"
-                   placeholder="Draft (m)"
-                   required>
-
-            <input type="number"
-                   step="0.1"
-                   name="speed"
-                   placeholder="Speed (knots)"
-                   required>
-
-            <button type="submit">
-                Register Vessel
-            </button>
-
+            <input type="text" name="vessel_name" placeholder="Vessel Name" required>
+            <input type="number" name="dwt" placeholder="Deadweight Tonnage" required>
+            <input type="number" step="0.1" name="draft" placeholder="Draft (m)" required>
+            <input type="number" step="0.1" name="speed" placeholder="Speed (knots)" required>
+            <button type="submit">Register Vessel</button>
         </form>
     </div>
 
@@ -46,5 +24,6 @@
 
 </div>
 
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>

@@ -18,77 +18,28 @@
     <div class="card">
         <h2>Abstract</h2>
         <p>
-            This project is a web-based maritime route optimization system that helps shipping operators analyze
-            voyage time, fuel consumption, weather risk, voyage cost, laycan risk and route diversion decisions.
-            The system provides a digital dashboard for safer and more economical ship routing.
+            This project helps shipping operators analyze voyage time, fuel consumption,
+            weather risk, voyage cost and route diversion decisions.
         </p>
     </div>
 
     <div class="card">
-        <h2>Objectives</h2>
-        <ul>
-            <li>Calculate voyage duration using distance and vessel speed.</li>
-            <li>Estimate fuel consumption and voyage cost.</li>
-            <li>Identify weather risk zones along the route.</li>
-            <li>Suggest alternate detour routes during bad weather.</li>
-            <li>Display route and weather information using an interactive map.</li>
-        </ul>
-    </div>
-
-    <div class="card">
-        <h2>System Modules</h2>
+        <h2>Modules</h2>
         <ul>
             <li>Route Planner</li>
             <li>Weather Risk Dashboard</li>
-            <li>Fuel Consumption Calculator</li>
+            <li>Fuel Calculator</li>
             <li>Voyage Cost Calculator</li>
             <li>Interactive Route Map</li>
-            <li>Route Diversion Recommendation</li>
-        </ul>
-    </div>
-
-    <div class="card">
-        <h2>Technology Used</h2>
-        <table>
-            <tr>
-                <th>Part</th>
-                <th>Technology</th>
-            </tr>
-            <tr>
-                <td>Frontend</td>
-                <td>HTML, CSS, JavaScript</td>
-            </tr>
-            <tr>
-                <td>Backend</td>
-                <td>Python Flask</td>
-            </tr>
-            <tr>
-                <td>Map</td>
-                <td>Leaflet.js</td>
-            </tr>
-            <tr>
-                <td>Database</td>
-                <td>MySQL</td>
-            </tr>
-        </table>
-    </div>
-
-    <div class="card">
-        <h2>Future Scope</h2>
-        <ul>
-            <li>Real-time marine weather API integration.</li>
-            <li>AI-based route recommendation engine.</li>
-            <li>PDF voyage report generation.</li>
-            <li>Fleet management dashboard.</li>
-            <li>Carbon emission calculation.</li>
+            <li>Admin Dashboard</li>
         </ul>
     </div>
 
     <a href="/">Back to Home</a>
-    <a href="/weather">Weather Dashboard</a>
-    <a href="/map">Voyage Map</a>
+    <a href="/download-report">Download PDF Report</a>
 
 </div>
 
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>
