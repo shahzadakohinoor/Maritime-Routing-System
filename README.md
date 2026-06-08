@@ -1,5 +1,5 @@
 # 🚢 AI-Powered Maritime Weather Routing & Voyage Optimization System
-
+![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 ## Live Demo
 
 🌐 **Live Application:** https://maritime-routing-system.onrender.com/
@@ -255,8 +255,8 @@ GitHub: https://github.com/shahzadakohinoor
 
 ## License
 
-This project is developed for educational, academic, internship, and research purposes.
-* © 2026 Shahzada Kohinoor. All Rights Reserved.
+This project is licensed under the MIT License - see the LICENSE file for details.
+© 2026 Shahzada Kohinoor. All Rights Reserved.
 
 ---
 
