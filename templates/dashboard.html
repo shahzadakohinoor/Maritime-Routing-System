@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Oceanova Weather Routing Dashboard</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+</head>
+
+<body class="oceanova-body">
+
+<div class="topbar">
+    <div class="logo-area">
+        <div class="logo-box">IME</div>
+        <div class="brand-title">Integrated Maritime Exchange</div>
+    </div>
+
+    <div class="nav-tabs">
+    <a href="/">Home</a>
+    <a href="/dashboard" class="active">Results</a>
+    <a href="/weather">Weather</a>
+    <a href="/history">Saved Routes</a>
+    <a href="/report">Report</a>
+</div>
+
+    <div class="user-box">KU Capt. Kunal</div>
+</div>
+
+<div class="subbar">
+    <strong>⊕ Oceanova — weather routing</strong>
+</div>
+
+<div class="dashboard-layout">
+
+    <!-- LEFT PANEL -->
+    <aside class="left-panel">
+        <div class="section-label">Departure</div>
+        <input value="Rotterdam, Netherlands">
+
+        <input value="11 May 2026">
+
+        <div class="section-label">Destination</div>
+        <input value="Jurong Island, Singapore">
+
+        <input value="10 June 2026">
+
+        <div class="section-label">Laycan</div>
+        <input placeholder="Laycan date range">
+
+        <div class="two-col">
+            <div>
+                <div class="section-label">Speed (kts)</div>
+                <input value="12">
+            </div>
+
+            <div>
+                <div class="section-label">Condition</div>
+                <select>
+                    <option>Ballast</option>
+                    <option>Laden</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="section-label">Vessel</div>
+
+        <div class="two-col">
+            <div>
+                <small>DWT</small>
+                <input value="50000">
+            </div>
+
+            <div>
+                <small>Draft (m)</small>
+                <input value="12">
+            </div>
+        </div>
+
+        <div class="alert-card">
+            <h3>⚠ Weather Alert — main route</h3>
+            <p>
+                Arabian Sea SW monsoon active<br>
+                Gale risk: 18–22% · Max BF 7<br>
+                Dates: 28 May – 10 Jun<br>
+                Affected: WP9 – WP13<br>
+                Data: ERA5 0.25° corridor
+            </p>
+        </div>
+
+        <div class="detour-card">
+            <h3>✓ Suggested detour</h3>
+            <p>
+                8°S deviation — south of monsoon<br>
+                +312 nm · +1.1 days<br>
+                Gale risk drops to 2.1%<br>
+                Weather cost savings: $18,400<br>
+                Net saving after extra fuel: $9,200
+            </p>
+        </div>
+    </aside>
+
+    <!-- CENTER MAP -->
+    <main class="center-map">
+        <div class="map-toolbar">
+            <span>Hover for coords</span>
+            <span>Inputs</span>
+            <span class="active">Results</span>
+            <span>Saved Routes</span>
+        </div>
+
+        <div class="map-legend">
+            <h3>Map legend</h3>
+            <p><span class="legend-blue"></span>Main route</p>
+            <p><span class="legend-red"></span>Bad weather segment</p>
+            <p><span class="legend-orange"></span>Suggested detour</p>
+            <p><span class="legend-risk"></span>High gale risk zone</p>
+            <p><span class="legend-green"></span>ECA zone</p>
+        </div>
+
+        <div id="map"></div>
+    </main>
+
+    <!-- RIGHT PANEL -->
+    <aside class="right-panel">
+        <div class="cost-label">Total Voyage Cost</div>
+        <div class="cost-value">$801,127</div>
+
+        <div class="saving-box">
+            <h3>Detour Saves</h3>
+            <div class="saving-main">$9,200 net</div>
+            <p>Weather avoided: $18,400</p>
+        </div>
+
+        <div class="metric-row">
+            <span>Distance (nm)</span>
+            <strong>8,412</strong>
+        </div>
+
+        <div class="metric-row">
+            <span>Detour adds</span>
+            <strong>+312 nm</strong>
+        </div>
+
+        <div class="metric-row">
+            <span>Voyage days</span>
+            <strong>29.2</strong>
+        </div>
+
+        <div class="metric-row">
+            <span>Detour adds</span>
+            <strong>+1.1 days</strong>
+        </div>
+
+        <div class="metric-row">
+            <span>ECA dist (nm)</span>
+            <strong>2,353</strong>
+        </div>
+
+        <div class="metric-row">
+            <span>Non-ECA dist</span>
+            <strong>6,059</strong>
+        </div>
+
+        <div class="metric-row">
+            <span>Max BF main</span>
+            <strong class="red">BF 7</strong>
+        </div>
+
+        <div class="metric-row">
+            <span>Max BF detour</span>
+            <strong class="green">BF 3</strong>
+        </div>
+
+        <div class="metric-row">
+            <span>Gale — main</span>
+            <strong class="red">18–22%</strong>
+        </div>
+
+        <div class="metric-row">
+            <span>Gale — detour</span>
+            <strong class="green">2.1%</strong>
+        </div>
+
+        <div class="metric-row">
+            <span>Total bunker</span>
+            <strong>934 MT</strong>
+        </div>
+
+        <div class="metric-row">
+            <span>Total fuel</span>
+            <strong>$432,227</strong>
+        </div>
+
+        <div class="metric-row">
+            <span>Weather data</span>
+            <strong class="green">ERA5 0.25°</strong>
+        </div>
+
+        <div class="metric-row">
+            <span>Corridor res.</span>
+            <strong class="green">28 km grid</strong>
+        </div>
+
+        <a href="/history" class="accept-btn">Accept detour route</a>
+    </aside>
+
+</div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+    const map = L.map("map", {
+        zoomControl: false,
+        attributionControl: false
+    }).setView([20, 55], 3);
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 8
+    }).addTo(map);
+
+    L.control.zoom({
+        position: "bottomleft"
+    }).addTo(map);
+
+    const mainRoute = [
+        [51.92, 4.48],
+        [36.14, -5.35],
+        [31.20, 29.91],
+        [29.97, 32.55],
+        [12.78, 43.27],
+        [10.5, 58.0],
+        [8.0, 74.0],
+        [1.35, 103.82]
+    ];
+
+    const badSegment = [
+        [12.78, 43.27],
+        [10.5, 58.0],
+        [8.0, 74.0]
+    ];
+
+    const detourRoute = [
+        [12.78, 43.27],
+        [4.5, 58.0],
+        [2.8, 75.0],
+        [1.35, 103.82]
+    ];
+
+    L.polyline(mainRoute, {
+        color: "#33a8ff",
+        weight: 5,
+        opacity: 0.9
+    }).addTo(map).bindPopup("Main Route");
+
+    L.polyline(badSegment, {
+        color: "#ff4747",
+        weight: 7,
+        opacity: 0.95
+    }).addTo(map).bindPopup("Bad Weather Segment");
+
+    L.polyline(detourRoute, {
+        color: "#ff8b3d",
+        weight: 4,
+        dashArray: "10,10",
+        opacity: 0.95
+    }).addTo(map).bindPopup("Suggested Detour");
+
+    L.circle([10, 63], {
+        color: "#ff4d4d",
+        fillColor: "#ff4d4d",
+        fillOpacity: 0.20,
+        radius: 1200000,
+        dashArray: "8,8"
+    }).addTo(map).bindPopup("SW Monsoon Zone");
+
+    L.circle([7.5, 55], {
+        color: "#ffae42",
+        fillColor: "#ffae42",
+        fillOpacity: 0.25,
+        radius: 300000
+    }).addTo(map).bindPopup("Caution Zone");
+
+    L.marker([51.92, 4.48]).addTo(map).bindPopup("Rotterdam");
+    L.marker([1.35, 103.82]).addTo(map).bindPopup("Singapore");
+</script>
+
+</body>
+</html>

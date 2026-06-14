@@ -1,9 +1,8 @@
-from flask import Flask, render_template, request, send_file, redirect, session, url_for
+from flask import Flask, render_template, request, redirect, session, send_file
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 from db_config import get_connection
 import requests
-import os
 
 app = Flask(__name__)
 app.secret_key = "maritime_secret_key"
@@ -11,67 +10,91 @@ app.secret_key = "maritime_secret_key"
 
 def calculate_voyage(distance, speed):
     days = distance / (speed * 24)
-
-    fuel_per_day = 32
-    fuel_price = 463
-    port_charges = 45000
-    canal_charges = 120000
-
-    fuel_used = days * fuel_per_day
-    fuel_cost = fuel_used * fuel_price
-    total_cost = fuel_cost + port_charges + canal_charges
+    fuel_used = days * 32
+    fuel_cost = fuel_used * 463
+    total_cost = fuel_cost + 45000 + 120000
 
     return {
         "days": round(days, 2),
         "fuel_used": round(fuel_used, 2),
         "fuel_cost": round(fuel_cost, 2),
         "total_cost": round(total_cost, 2),
-        "port_charges": port_charges,
-        "canal_charges": canal_charges,
+        "weather_risk": "High",
         "gale_risk": "18% - 22%",
         "sea_state": "BF 7",
-        "diversion": "8° Southward Deviation Recommended",
-        "weather_risk": "High"
+        "diversion": "8° Southward Deviation Recommended"
     }
-
-
-def get_marine_weather():
-    try:
-        url = "https://marine-api.open-meteo.com/v1/marine"
-
-        params = {
-            "latitude": 12,
-            "longitude": 65,
-            "hourly": "wave_height,wave_direction,wave_period",
-            "timezone": "auto"
-        }
-
-        response = requests.get(url, params=params, timeout=10)
-        data = response.json()
-
-        wave_height = data["hourly"]["wave_height"][0]
-        wave_direction = data["hourly"]["wave_direction"][0]
-        wave_period = data["hourly"]["wave_period"][0]
-
-    except Exception as e:
-        print("Weather API Error:", e)
-        wave_height = 4.2
-        wave_direction = 240
-        wave_period = 8
-
-    if wave_height >= 4:
-        risk_level = "High"
-    elif wave_height >= 2:
-        risk_level = "Medium"
-    else:
-        risk_level = "Low"
-
-    return wave_height, wave_direction, wave_period, risk_level
 
 
 @app.route("/")
 def home():
     return render_template("index.html")
+
+
+@app.route("/login-page")
+def login_page():
+    return render_template("login.html")
+
+
+@app.route("/login", methods=["POST"])
+def login():
+    username = request.form["username"]
+    password = request.form["password"]
+
+    try:
+        conn = get_connection()
+        cursor = conn.cursor(dictionary=True)
+
+        cursor.execute(
+            "SELECT * FROM users WHERE username=%s AND password=%s",
+            (username, password)
+        )
+
+        user = cursor.fetchone()
+        cursor.close()
+        conn.close()
+
+        if user:
+            session["admin"] = username
+            return redirect("/dashboard")
+
+        return render_template("login.html", error="Invalid username or password")
+
+    except Exception as e:
+        return render_template(
+            "login.html",
+            error=str(e)
+        )
+
+
+@app.route("/logout")
+def logout():
+    session.pop("admin", None)
+    return redirect("/login-page")
+
+
+@app.route("/dashboard")
+def dashboard():
+    if "admin" not in session:
+        return redirect("/login-page")
+
+    return render_template(
+        "dashboard.html",
+        total_cost=801127,
+        detour_saving=9200,
+        distance=8412,
+        detour_distance=312,
+        voyage_days=29.2,
+        extra_days=1.1,
+        eca_distance=2353,
+        non_eca_distance=6059,
+        max_bf_main="BF 7",
+        max_bf_detour="BF 3",
+        gale_main="18-22%",
+        gale_detour="2.1%",
+        total_bunker=934,
+        total_fuel=432227
+    )
 
 
 @app.route("/route", methods=["POST"])
@@ -110,7 +133,6 @@ def route():
 
         cursor.execute(sql, values)
         conn.commit()
-
         cursor.close()
         conn.close()
 
@@ -135,7 +157,34 @@ def route():
 
 @app.route("/weather")
 def weather():
-    wave_height, wave_direction, wave_period, risk_level = get_marine_weather()
+    try:
+        url = "https://marine-api.open-meteo.com/v1/marine"
+        params = {
+            "latitude": 12,
+            "longitude": 65,
+            "hourly": "wave_height,wave_direction,wave_period",
+            "timezone": "auto"
+        }
+
+        response = requests.get(url, params=params, timeout=10)
+        data = response.json()
+
+        wave_height = data["hourly"]["wave_height"][0]
+        wave_direction = data["hourly"]["wave_direction"][0]
+        wave_period = data["hourly"]["wave_period"][0]
+
+    except Exception as e:
+        print("Weather API Error:", e)
+        wave_height = 4.2
+        wave_direction = 240
+        wave_period = 8
+
+    if wave_height >= 4:
+        risk_level = "High"
+    elif wave_height >= 2:
+        risk_level = "Medium"
+    else:
+        risk_level = "Low"
 
     return render_template(
         "weather.html",
@@ -151,10 +200,8 @@ def history():
     try:
         conn = get_connection()
         cursor = conn.cursor(dictionary=True)
-
         cursor.execute("SELECT * FROM voyage ORDER BY voyage_id DESC")
         voyages = cursor.fetchall()
-
         cursor.close()
         conn.close()
 
@@ -167,7 +214,19 @@ def history():
 
 @app.route("/vessel")
 def vessel():
-    return render_template("vessel.html")
+    try:
+        conn = get_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SELECT * FROM vessel ORDER BY vessel_id DESC")
+        vessels = cursor.fetchall()
+        cursor.close()
+        conn.close()
+
+    except Exception as e:
+        print("Database Error:", e)
+        vessels = []
+
+    return render_template("vessel.html", vessels=vessels)
 
 
 @app.route("/add-vessel", methods=["POST"])
@@ -181,15 +240,16 @@ def add_vessel():
         conn = get_connection()
         cursor = conn.cursor()
 
-        sql = """
-        INSERT INTO vessel
-        (vessel_name, dwt, draft, speed)
-        VALUES (%s,%s,%s,%s)
-        """
+        cursor.execute(
+            """
+            INSERT INTO vessel
+            (vessel_name, dwt, draft, speed)
+            VALUES (%s,%s,%s,%s)
+            """,
+            (vessel_name, dwt, draft, speed)
+        )
 
-        cursor.execute(sql, (vessel_name, dwt, draft, speed))
         conn.commit()
-
         cursor.close()
         conn.close()
 
@@ -197,47 +257,6 @@ def add_vessel():
         print("Database Error:", e)
 
     return redirect("/vessel")
-
-
-@app.route("/login-page")
-def login_page():
-    return render_template("login.html")
-
-
-@app.route("/login", methods=["POST"])
-def login():
-    username = request.form["username"]
-    password = request.form["password"]
-
-    try:
-        conn = get_connection()
-        cursor = conn.cursor(dictionary=True)
-
-        cursor.execute(
-            "SELECT * FROM users WHERE username=%s AND password=%s",
-            (username, password)
-        )
-
-        user = cursor.fetchone()
-
-        cursor.close()
-        conn.close()
-
-        if user:
-            session["admin"] = username
-            return redirect("/admin")
-
-        return render_template("login.html", error="Invalid username or password")
-
-    except Exception as e:
-        print("Database Error:", e)
-        return render_template("login.html", error="Database connection failed")
-
-
-@app.route("/logout")
-def logout():
-    session.pop("admin", None)
-    return redirect("/")
 
 
 @app.route("/admin")
@@ -255,7 +274,7 @@ def admin():
         cursor.execute("SELECT COUNT(*) FROM vessel")
         total_vessels = cursor.fetchone()[0]
 
-        cursor.execute("SELECT IFNULL(SUM(total_cost),0) FROM voyage")
+        cursor.execute("SELECT IFNULL(SUM(total_cost), 0) FROM voyage")
         total_cost = cursor.fetchone()[0]
 
         cursor.close()
@@ -316,4 +335,4 @@ def download_report():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(debug=True) 
