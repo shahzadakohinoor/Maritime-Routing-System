@@ -1,0 +1,157 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #071827;
+  color: white;
+}
+
+.navbar {
+  background: #0b1d32;
+  padding: 18px 8%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar h2 {
+  color: #00d084;
+  margin: 0;
+}
+
+.navbar a {
+  color: white;
+  text-decoration: none;
+  margin-left: 20px;
+  font-weight: bold;
+}
+
+.navbar a:hover {
+  color: #00d084;
+}
+
+.hero {
+  padding: 90px 8%;
+  background: linear-gradient(135deg, #071827, #102a43);
+}
+
+.hero h1 {
+  color: #00d084;
+  font-size: 48px;
+  margin-bottom: 15px;
+}
+
+.hero p {
+  font-size: 20px;
+  max-width: 650px;
+}
+
+button {
+  background: #00d084;
+  color: #071827;
+  border: none;
+  padding: 14px 24px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 15px;
+}
+
+button:hover {
+  background: #00b874;
+}
+
+.cards {
+  padding: 40px 8%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.card {
+  background: #102a43;
+  padding: 28px;
+  border-radius: 12px;
+  border: 1px solid #1f4b6e;
+}
+
+.card h3 {
+  color: #00d084;
+  margin-top: 0;
+}
+
+.card p {
+  line-height: 1.6;
+}
+
+.page {
+  padding: 70px 8%;
+  min-height: 70vh;
+}
+
+.page h1 {
+  color: #00d084;
+  font-size: 42px;
+}
+
+input {
+  width: 100%;
+  display: block;
+  padding: 14px;
+  margin: 12px 0;
+  border-radius: 8px;
+  border: 1px solid #1f4b6e;
+  background: #071827;
+  color: white;
+  font-size: 16px;
+}
+
+.footer {
+  background: #0b1d32;
+  text-align: center;
+  padding: 20px;
+  color: #b9c8d8;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+
+  .navbar a {
+    display: inline-block;
+    margin: 8px;
+  }
+
+  .hero {
+    padding: 60px 6%;
+    text-align: center;
+  }
+
+  .hero h1 {
+    font-size: 34px;
+  }
+
+  .hero p {
+    font-size: 17px;
+  }
+
+  .cards {
+    grid-template-columns: 1fr;
+    padding: 30px 6%;
+  }
+
+  .page {
+    padding: 50px 6%;
+  }
+
+  .page h1 {
+    font-size: 32px;
+  }
+}
