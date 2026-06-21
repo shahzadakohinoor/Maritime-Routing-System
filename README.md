@@ -1,266 +1,130 @@
-# 🚢 AI-Powered Maritime Weather Routing & Voyage Optimization System
-![License](https://img.shields.io/badge/License-MIT-yellow.svg)
+# Oceanova Maritime Routing System Frontend
 
----
+## Overview
 
-## Project Overview
+Oceanova is a React-based frontend application designed for maritime weather routing and voyage optimization. The application provides a responsive user interface for route planning, weather analysis, fuel cost estimation, and voyage management.
 
-The AI-Powered Maritime Weather Routing & Voyage Optimization System is a web-based application designed to assist shipping operators in planning safer and more economical voyages.
+## Features
 
-The system analyzes voyage routes, weather conditions, fuel consumption, voyage costs, ETA predictions, laycan compliance, and route diversion opportunities to improve operational efficiency and maritime safety.
+### Week 2 Features
 
----
+* Responsive Home Page
+* Navigation Bar
+* Hero Section
+* Information Cards
+* Footer Component
+* About Page
+* Dashboard Page
+* Login Page
+* React Router Navigation
 
-## Key Features
+### Week 3 Features
 
-### 🌍 Route Planning
-
-* Source and destination port selection
-* Distance calculation
-* Voyage duration estimation
-* ETA prediction
-
-### 🌦 Weather Analysis
-
-* Marine weather monitoring
-* Wave height analysis
-* Weather risk assessment
-* Monsoon and storm impact evaluation
-
-### ⛽ Fuel Management
-
-* Fuel consumption estimation
-* Bunker cost calculation
-* Voyage fuel optimization
-
-### 💰 Cost Optimization
-
-* Fuel cost analysis
-* Port charges calculation
-* Canal transit cost estimation
-* Total voyage cost computation
-
-### 🚨 Route Diversion Recommendation
-
-* Weather-based routing
-* Risk reduction suggestions
-* Cost-benefit analysis
-
-### 📊 Voyage History
-
-* Historical voyage records
-* Route performance tracking
-* Cost comparison
-
-### 🚢 Vessel Management
-
-* Vessel registration
-* Fleet monitoring
-* Vessel specifications management
-
-### 🔐 Admin Dashboard
-
-* Secure login system
-* Voyage statistics
-* Fleet statistics
-* Operational monitoring
-
-### 📄 PDF Report Generation
-
-* Voyage summary reports
-* Downloadable PDF reports
-* Performance documentation
-
----
+* Reusable UI Component Library
+* Button Component
+* Input Component
+* Modal Component
+* Toast Notification Component
+* Loader Component
+* Component Showcase/Demo Page
+* Dark Mode / Light Mode Toggle
+* Responsive Design for Mobile, Tablet, and Desktop
+* Figma Wireframes
+* GitHub Commit History Following Conventional Commits
 
 ## Technology Stack
 
-### Frontend
-
-* HTML5
+* React.js
+* Vite
+* React Router DOM
 * CSS3
-* JavaScript
-* Bootstrap
-
-### Backend
-
-* Python
-* Flask
-
-### Database
-
-* MySQL
-
-### APIs
-
-* Open-Meteo Marine Weather API
-
-### Deployment
-
-* Render
-
----
+* JavaScript (ES6+)
 
 ## Project Structure
 
 ```text
-Maritime-Routing-System/
+src/
+├── components/
+│   ├── Navbar.jsx
+│   ├── Hero.jsx
+│   ├── Card.jsx
+│   ├── Footer.jsx
+│   └── ui/
+│       ├── Button.jsx
+│       ├── Input.jsx
+│       ├── Modal.jsx
+│       ├── Toast.jsx
+│       ├── Loader.jsx
+│       └── index.js
 │
-├── app.py
-├── db_config.py
-├── requirements.txt
-├── Procfile
-├── README.md
+├── pages/
+│   ├── Home.jsx
+│   ├── About.jsx
+│   ├── Dashboard.jsx
+│   ├── Login.jsx
+│   └── ComponentsDemo.jsx
 │
-├── database/
-│   └── maritime.sql
-│
-├── static/
-│   ├── css/
-│   │   └── style.css
-│   │
-│   ├── js/
-│   │   └── script.js
-│   │
-│   └── images/
-│
-└── templates/
-    ├── index.html
-    ├── route.html
-    ├── weather.html
-    ├── history.html
-    ├── vessel.html
-    ├── login.html
-    ├── admin.html
-    ├── map.html
-    └── report.html
+├── App.jsx
+├── main.jsx
+└── index.css
 ```
-
----
 
 ## Installation
 
-### Clone Repository
+Clone the repository:
 
 ```bash
-git clone https://github.com/shahzadakohinoor/Maritime-Routing-System.git
-cd Maritime-Routing-System
+git clone <repository-url>
 ```
 
-### Create Virtual Environment
+Navigate to the project folder:
 
 ```bash
-python -m venv venv
+cd maritime-frontend
 ```
 
-### Activate Virtual Environment
-
-Windows:
+Install dependencies:
 
 ```bash
-venv\Scripts\activate
+npm install
 ```
 
-Linux/Mac:
+Run the development server:
 
 ```bash
-source venv/bin/activate
-```
-
-### Install Dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
-### Run Application
-
-```bash
-python app.py
+npm run dev
 ```
 
 Open:
 
 ```text
-http://127.0.0.1:5000
+http://localhost:5173
 ```
 
----
+## Available Routes
 
-## Database Setup
-
-### Create Database
-
-```sql
-CREATE DATABASE maritime_routing;
-```
-
-### Import SQL File
-
-```text
-database/maritime.sql
-```
-
-Import using phpMyAdmin or MySQL Workbench.
-
----
-
-## Default Admin Login
-
-```text
-Username: admin
-Password: admin123
-```
-
----
-
-## Future Enhancements
-
-* AI-based route optimization engine
-* Machine learning fuel prediction
-* Real-time vessel tracking
-* Carbon emission analytics
-* Fleet management dashboard
-* Advanced weather forecasting
-* Interactive GIS mapping
-* Voyage performance benchmarking
-
----
+| Route       | Description        |
+| ----------- | ------------------ |
+| /           | Home Page          |
+| /about      | About Page         |
+| /dashboard  | Dashboard Page     |
+| /login      | Login Page         |
+| /components | UI Components Demo |
 
 ## Screenshots
 
-Add screenshots of:
-
-* Home Page
-* Route Calculator
-* Weather Dashboard
-* Voyage Map
-* Voyage History
-* Admin Dashboard
-
----
+* Desktop View
+* Tablet View
+* Mobile View
+* Dark Mode View
+* Light Mode View
 
 ## Author
 
 **Shahzada Kohinoor**
 
-BCA Student | Full Stack Developer | Data Analytics Enthusiast
+## Internship Module
 
-GitHub: https://github.com/shahzadakohinoor
+TBI-GEU Frontend Development Internship
 
----
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-© 2026 Shahzada Kohinoor. All Rights Reserved.
-
----
-
-## Acknowledgements
-
-* Flask Framework
-* Open-Meteo Marine API
-* MySQL Database
-* Render Hosting Platform
-* OpenStreetMap & Leaflet Maps
+Week 3 Submission
