@@ -1,8 +1,5 @@
 # 🚢 AI-Powered Maritime Weather Routing & Voyage Optimization System
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg)
-## Live Demo
-
-🌐 **Live Application:** https://maritime-routing-system.onrender.com/
 
 ---
 
